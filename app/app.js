@@ -7,10 +7,27 @@ app.use(express.json())
 //localhost:3000/
 app.get('/', (req, res) => {
     console.log('GET');
-    res.json({message:'Hello World'});
-})
+    res.json({message:'Service is up'});
+});
 
 //localhost:3000/api
 app.use('/api', router);
+
+
+
+
+
+
+
+app.use((req, res, next) =>{
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    // console.log("ERROR >>>" , error);
+    res.status(error.status || 500).json({message: error.message, status: error.status});
+})
 
 module.exports = app;
